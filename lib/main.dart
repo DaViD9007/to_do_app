@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/screens/SignUp.dart';
-import 'package:to_do_app/screens/login.dart';
+import 'package:to_do_app/auth/authPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignupScreen(),
+      home: AuthPage(),
     );
   }
 }

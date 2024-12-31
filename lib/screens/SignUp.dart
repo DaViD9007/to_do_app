@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/const/colours.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  final VoidCallback show;
+  const SignupScreen(this.show,{super.key});
 
   @override
   State<SignupScreen> createState() => SignupScreenState();
 }
 
 class SignupScreenState extends State<SignupScreen> {
-  FocusNode _focusNode1 = FocusNode();
-  FocusNode _focusNode2 = FocusNode();
-  FocusNode _focusNode3  = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final FocusNode _focusNode3  = FocusNode();
 
   final email = TextEditingController();
   final password = TextEditingController();
@@ -69,12 +70,15 @@ class SignupScreenState extends State<SignupScreen> {
                 style: TextStyle(color: Colors.grey[700], fontSize: 14),
               ),
               SizedBox(width: 5),
-              Text(
-                "Login",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: widget.show,
+                child: Text(
+                  "Login",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               )
             ],
@@ -105,7 +109,7 @@ class SignupScreenState extends State<SignupScreen> {
         );
   }
 
-  Widget textField(TextEditingController _controller, FocusNode _focusNode, String typeName, IconData iconss) {
+  Widget textField(TextEditingController controller, FocusNode focusNode, String typeName, IconData iconss) {
     return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: Container(
@@ -114,13 +118,13 @@ class SignupScreenState extends State<SignupScreen> {
               borderRadius: BorderRadius.circular(15),
             ),
             child: TextField(
-              controller: _controller,
-              focusNode: _focusNode,
+              controller: controller,
+              focusNode: focusNode,
               style: TextStyle(fontSize: 18, color: Colors.black),
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   iconss,
-                  color: _focusNode.hasFocus ? customGreen: Colors.grey,
+                  color: focusNode.hasFocus ? customGreen: Colors.grey,
                 ),
                 contentPadding: 
                   EdgeInsets.symmetric(horizontal: 15, vertical: 15),

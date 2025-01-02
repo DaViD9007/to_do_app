@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/const/colours.dart';
+import 'package:to_do_app/data/auth_data.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback show;
-  const LoginScreen(this.show,{super.key});
+  const LoginScreen(this.show, {super.key});
 
   @override
   State<LoginScreen> createState() => LoginScreenState();
@@ -20,48 +21,48 @@ class LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _focusNode1.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
     super.initState();
-    _focusNode2.addListener((){
-      setState(() {
-      });
+    _focusNode2.addListener(() {
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColour,
-      body: SafeArea(
-        child: SingleChildScrollView(
-        child: Column(children: [
-          SizedBox(height: 20),
-          image(),
-          SizedBox(height: 50),
-          textField(email, _focusNode1, 'Email', Icons.email),
-          SizedBox(height: 10),
-          textField(password, _focusNode2, 'Password', Icons.password),
-          SizedBox(height: 10),
-          account(),
-          loginBottom()
-        ]),
-      )));
+        backgroundColor: backgroundColour,
+        body: SafeArea(
+            child: SingleChildScrollView(
+          child: Column(children: [
+            SizedBox(height: 20),
+            image(),
+            SizedBox(height: 50),
+            textField(email, _focusNode1, 'Email', Icons.email),
+            SizedBox(height: 10),
+            textField(password, _focusNode2, 'Password', Icons.password),
+            SizedBox(height: 10),
+            account(),
+            loginBottom()
+          ]),
+        )));
   }
 
   Padding account() {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                "Don't have an account?",
-                style: TextStyle(color: Colors.grey[700], fontSize: 14),
-              ),
-              SizedBox(width: 5),
-              GestureDetector(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              "Don't have an account?",
+              style: TextStyle(color: Colors.grey[700], fontSize: 14),
+            ),
+            SizedBox(width: 5),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
                 onTap: widget.show,
                 child: Text(
                   "Sign Up",
@@ -71,23 +72,29 @@ class LoginScreenState extends State<LoginScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              )
-            ],
-          )
-          );
+              ),
+            ),
+          ],
+        ));
   }
 
   Padding loginBottom() {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              color: customGreen,
-              borderRadius: BorderRadius.circular(10),
-            ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: GestureDetector(
+        onTap: () {
+          AuthenticationRemote().login(email.text, password.text);
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: double.infinity,
+          height: 50,
+          decoration: BoxDecoration(
+            color: customGreen,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
             child: Text(
               'Login',
               style: TextStyle(
@@ -97,61 +104,66 @@ class LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-        );
+        ),
+      ),
+    );
   }
 
-  Widget textField(TextEditingController controller, FocusNode focusNode, String typeName, IconData iconss) {
+  Widget textField(TextEditingController controller, FocusNode focusNode,
+      String typeName, IconData iconss) {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: TextField(
-              controller: controller,
-              focusNode: focusNode,
-              style: TextStyle(fontSize: 18, color: Colors.black),
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  iconss,
-                  color: focusNode.hasFocus ? customGreen: Colors.grey,
-                ),
-                contentPadding: 
-                  EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                hintText: typeName,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                    width: 2.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: customGreen,
-                    width: 2.0,
-                  ),
-                )            
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: TextField(
+          controller: controller,
+          focusNode: focusNode,
+          style: TextStyle(fontSize: 18, color: Colors.black),
+          obscureText: typeName
+              .toLowerCase()
+              .contains('password'), // Obscure text for password fields
+          decoration: InputDecoration(
+              prefixIcon: Icon(
+                iconss,
+                color: focusNode.hasFocus ? customGreen : Colors.grey,
               ),
-            ),
-          ),
-        );
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              hintText: typeName,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2.0,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: customGreen,
+                  width: 2.0,
+                ),
+              )),
+        ),
+      ),
+    );
   }
 
   Widget image() {
     return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            width: double.infinity,
-            height: 300,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage('images/img1.jpg'),
-              fit: BoxFit.cover,
-            )),
-          ),
-        );
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.infinity,
+        height: 300,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage('images/img1.jpg'),
+          fit: BoxFit.cover,
+        )),
+      ),
+    );
   }
 }

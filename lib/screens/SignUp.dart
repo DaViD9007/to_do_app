@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/const/colours.dart';
+import 'package:to_do_app/data/auth_data.dart';
 
 class SignupScreen extends StatefulWidget {
   final VoidCallback show;
@@ -37,6 +38,29 @@ class SignupScreenState extends State<SignupScreen> {
     });
   }
 
+  Future<void> signUp() async {
+    if (password.text != passwordConfirmation.text) {
+      // Show error message if passwords do not match
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+
+    try {
+      await AuthenticationRemote().register(email.text, password.text, passwordConfirmation.text);
+      // User created successfully
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User created successfully')),
+      );
+    } catch (e) {
+      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +75,7 @@ class SignupScreenState extends State<SignupScreen> {
           SizedBox(height: 10),
           textField(password, _focusNode2, 'Password', Icons.password),
           SizedBox(height: 10),
-          textField(password, _focusNode3, 'Confirm password', Icons.password),
+          textField(passwordConfirmation, _focusNode3, 'Confirm password', Icons.password),
           SizedBox(height: 8),
           account(),
           signupBottom()
@@ -89,20 +113,25 @@ class SignupScreenState extends State<SignupScreen> {
   Padding signupBottom() {
     return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              color: customGreen,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              'Sign up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 23,
-                fontWeight: FontWeight.bold,
+          child: GestureDetector(
+            onTap: () {
+              signUp();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: customGreen,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Sign up',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -121,6 +150,7 @@ class SignupScreenState extends State<SignupScreen> {
               controller: controller,
               focusNode: focusNode,
               style: TextStyle(fontSize: 18, color: Colors.black),
+              obscureText: typeName.toLowerCase().contains('password'), // Obscure text for password fields
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   iconss,

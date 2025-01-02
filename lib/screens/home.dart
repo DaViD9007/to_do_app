@@ -56,46 +56,60 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('To-Do App'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              logout();
-            },
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.logout),
+                  onPressed: logout,
+                ),
+                Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [            
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
-              ),
+      body: elements(),
+    );
+  }
+
+  Padding elements() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: titleController,
+            decoration: InputDecoration(
+              labelText: 'Title',
+              border: OutlineInputBorder(),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                labelText: 'Description',
-                border: OutlineInputBorder(),
-              ),
+          ),
+          SizedBox(height: 16),
+          TextField(
+            controller: descriptionController,
+            decoration: InputDecoration(
+              labelText: 'Description',
+              border: OutlineInputBorder(),
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: addTodo,
-              child: Text('Add To-Do'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: toDoList,
-              child: Text('To do list'),
-            ),
-            SizedBox(height: 16),
-          ],
-        ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: addTodo,
+            child: Text('Add To-Do'),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: toDoList,
+            child: Text('To do list'),
+          ),
+          SizedBox(height: 16),
+        ],
       ),
     );
   }
